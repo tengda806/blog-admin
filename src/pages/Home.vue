@@ -1,6 +1,6 @@
 <template>
     <div class="home-wrap">
-        
+           wqd
     </div>
 </template>
 
@@ -11,5 +11,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-
+    .home-wrap{
+        
+    }
 </style>

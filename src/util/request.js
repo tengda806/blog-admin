@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { stringify } from 'qs'
 const request = axios.create({
-  baseURL: 'http://localhost:3001/admin/',
+  baseURL: 'http://localhost:8808/admin/',
   headers: {
     post: {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -34,21 +34,22 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   response => {
     const ret = response.data
-    if (ret.code) {
+    if (ret.code || ret.code === 0) {
       switch (ret.code) {
-        case 200:
+        case 1:
+          return ret ;
+        case 2:
+          localStorage.removeItem('token')
           return ret 
         default:
-          return Promise.reject(`${ret.code}:${ret.msg}`)
+          return ret
       }
     } else {
       return Promise.reject('未返回code')
     }
   },
   error => {
-    if(error.message.includes('timeout')){   
-        console.error('请求超时')
-    }
+    
     return Promise.reject(error)
   },
 )

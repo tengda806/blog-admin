@@ -19,6 +19,7 @@
 
 <script>
 import { login } from '../api/user'
+
 export default {
         data(){
             return {
@@ -27,13 +28,20 @@ export default {
             }
         },
         methods:{
-            userLogin(){ // 用组件封装需要加native
-                login({
-                    uname : this.uname,
-                    upass : this.upass
-                })
+         userLogin(){ // 用组件封装需要加native
+          login({uname : this.uname,upass : md5(this.upass)}).then(res=>{
+              if(res.code ===1){
+                  localStorage.setItem('token',res.token)
+                  this.$message.success(res.msg)
+                  this.$router.push(this.$route.query.from)
+              }else{
+                  this.$message.error(res.msg)
+              }
+          })
+
             }
         }
+          
 }
 </script>
 

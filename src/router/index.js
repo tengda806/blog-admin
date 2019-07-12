@@ -1,15 +1,28 @@
 import Router from "vue-router" 
-import Home from "../pages/Home"
 import Login from "../pages/Login"
+import LeftMenu from "../components/LeftMenu"
 import Vue from "vue"
 Vue.use(Router)
 const router =  new Router ({
     mode:"history",
     routes:[
         {
-            path:'/',
+            path:'/LeftMenu',
             name:'Home',
-            component:Home
+            component:LeftMenu,
+            redirect:'/home',
+            children:[
+                {
+                    path:'/home',
+                    component : ()=>import('../pages/Home'),
+                    name:'Home'
+                },
+                {
+                    path:'/write',
+                    component : ()=>import('../pages/Write'),
+                    name:'Write'
+                }
+            ]
         },
         {
             path:'/login',
@@ -20,12 +33,17 @@ const router =  new Router ({
 })
 
 
-// router.beforeEach((to,from,next)=>{
-//     next()
-// })
-// router.afterEach(to=>{
-
-// })
+router.beforeEach((to,from,next)=>{
+    if(to.path === '/login') return next()
+    let token = localStorage.getItem('token');
+    if(token){
+        //已登录
+        next()
+    }else{
+        //未登录
+       next('/login?'+'from='+to.path)
+    }
+})
 
 export default router ; 
 
