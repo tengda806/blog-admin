@@ -13,12 +13,17 @@ const request = axios.create({
 // 请求拦截器
 request.interceptors.request.use(
   config => {
+    let token = localStorage.getItem('token')
+    config.headers.token = token
       // 让每个请求携带token
-      if (config.method === 'get') {
-        config.params = { ...config.params }
+      if (config.method === 'get' ) {
+        config.params = {  ...config.params }
+  
       } else {
         config.data = { ...config.data }
+        
       }
+
     config.data = stringify(config.data, { arrayFormat: 'brackets' })
     return config
   },
@@ -40,6 +45,7 @@ request.interceptors.response.use(
           return ret ;
         case 2:
           localStorage.removeItem('token')
+          
           return ret 
         default:
           return ret
