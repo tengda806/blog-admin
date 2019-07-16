@@ -12,7 +12,7 @@ export const savePost = data => {
 
 export const putPost = data => {
     return request({
-        method:'put',
+        method:'put', 
         url:'/post',
         data    
     })
